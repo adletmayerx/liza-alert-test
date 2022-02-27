@@ -1,0 +1,11 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  width: 600px;
+}
+
+.card__kids {
+  margin-left: 40px;
+}

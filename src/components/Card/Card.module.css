@@ -1,0 +1,30 @@
+.card {
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 15px;
+  max-width: 768px;
+  background-color: #fff;
+  min-width: 300px;
+}
+
+.card__link {
+  text-decoration: none;
+  color: #000;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.card__title {
+  min-width: 200px;
+  max-width: 600px;
+}
+
+.card__author {
+  font-weight: 600;
+}
