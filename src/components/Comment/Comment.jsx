@@ -1,7 +1,15 @@
 import styles from "./Comment.module.css";
 import { useEffect, useRef } from "react";
 
-const Comment = ({ text, author, time, kids, children, timeConverter, CommentElement }) => {
+const Comment = ({
+  text,
+  author,
+  time,
+  kids,
+  subComments,
+  timeConverter,
+  makeList,
+}) => {
   const ref = useRef(null);
   const date = timeConverter(time);
 
@@ -20,7 +28,7 @@ const Comment = ({ text, author, time, kids, children, timeConverter, CommentEle
         <p className={styles.card__author}>{author}</p>
         <p className={styles.card__date}>{date}</p>
       </div>
-      {kids && <div className={styles.card__kids}>{children}</div>}
+      {kids && <div className={styles.card__kids}>{subComments !== null && makeList(subComments)}</div>}
     </div>
   );
 };

@@ -12,21 +12,92 @@ const NewsItem = ({ newsList, timeConverter }) => {
 
   const [commentsSectionIsOpen, setCommentsSectionIsOpen] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
+  const [commentsHierarchy, setCommentsHierarchy] = useState([]);
 
   const handleCommentsButtonClick = () => {
     setCommentsSectionIsOpen(!commentsSectionIsOpen);
   };
 
+  const makeList = (arr) => {
+    return (
+      <ul className={styles["card__comments-list"]}>
+        {arr.map((c) => {
+          return (
+            <li key={c.id}>
+              <Comment
+                text={c.text}
+                author={c.by}
+                time={c.time}
+                kids={null || c.kids}
+                timeConverter={timeConverter}
+                makeList={makeList}
+                subComments={null || c.subComments}
+              ></Comment>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  };
+
   useEffect(() => {
+    const checkKids = (parent) => {
+      if (parent.kids) {
+        parent.kids.forEach((item) => {
+          api.getItemById(item).then((res) => {
+            setCommentsList((c) => [...c, res]);
+            checkKids(res);
+          });
+        });
+      }
+    };
+
     if (newsItem.kids) {
       newsItem.kids.forEach((id) => {
         api.getItemById(id).then((res) => {
           setCommentsList((c) => [...c, res]);
+          checkKids(res);
         });
       });
     }
   }, [newsItem.kids]);
 
+  useEffect(() => {
+    const buildHierarchy = (array) => {
+      let roots = [];
+      let subComments = {};
+
+      for (let i = 0; i < array.length; ++i) {
+        let item = array[i];
+        let p = item.parent;
+        let target =
+          p === newsItem.id ? roots : subComments[p] || (subComments[p] = []);
+
+        target.push(item);
+      }
+
+      const findChildren = (parent) => {
+        if (subComments[parent.id]) {
+          parent.subComments = subComments[parent.id];
+          for (var i = 0; i < parent.subComments.length; ++i) {
+            findChildren(parent.subComments[i]);
+          }
+        }
+      };
+
+      for (let i = 0; i < roots.length; ++i) {
+        findChildren(roots[i]);
+      }
+
+      return roots;
+    };
+
+    setCommentsHierarchy(buildHierarchy(commentsList));
+  }, [commentsList, newsItem.id]);
+
+  useEffect(() => {
+    console.log(commentsHierarchy);
+  }, [commentsHierarchy]);
   return (
     <div className={styles.card}>
       <div className={styles.card__header}>
@@ -64,18 +135,7 @@ const NewsItem = ({ newsList, timeConverter }) => {
         </button>{" "}
         {newsItem.descendants > 0 && commentsSectionIsOpen && (
           <ul className={styles["card__comments-list"]}>
-            {commentsList.map((c) => (
-              <li key={c.id}>
-                <Comment
-                  text={c.text}
-                  author={c.by}
-                  time={c.time}
-                  kids={null || c.kids}
-                  timeConverter={timeConverter}
-                >
-                </Comment>
-              </li>
-            ))}
+            {makeList(commentsHierarchy)}
           </ul>
         )}
       </div>
