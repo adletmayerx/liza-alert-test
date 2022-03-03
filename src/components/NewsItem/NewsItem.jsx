@@ -84,10 +84,7 @@ const NewsItem = ({ newsList, timeConverter }) => {
     setCommentsHierarchy(buildHierarchy(commentsList));
   }, [commentsList, newsItem.id]);
 
-  useEffect(() => {
-    console.log(commentsHierarchy);
-  }, [commentsHierarchy]);
-  return (
+    return (
     <div className={styles.card}>
       <div className={styles.card__header}>
         <Link className={styles.card__link} to="/liza-alert-test">

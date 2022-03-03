@@ -43,7 +43,7 @@ const Comment = ({
 };
 
 Comment.propTypes = {
-  dead: PropTypes.bool.isRequired,
+  dead: PropTypes.bool,
   text: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   time: PropTypes.number.isRequired,
