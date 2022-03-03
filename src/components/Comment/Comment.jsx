@@ -1,11 +1,12 @@
 import styles from "./Comment.module.css";
 import { useEffect, useRef } from "react";
+import PropTypes from "prop-types";
 
 const Comment = ({
+  dead,
   text,
   author,
   time,
-  kids,
   subComments,
   timeConverter,
   makeList,
@@ -14,12 +15,16 @@ const Comment = ({
   const date = timeConverter(time);
 
   useEffect(() => {
-    function htmlDecode(input) {
-      var doc = new DOMParser().parseFromString(input, "text/html");
-      return doc.documentElement.textContent;
+    if (dead) {
+      ref.current.textContent = "comment deleted";
+    } else {
+      function htmlDecode(input) {
+        var doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+      }
+      ref.current.textContent = htmlDecode(text);
     }
-    ref.current.textContent = htmlDecode(text);
-  }, [ref, text]);
+  }, [dead, ref, text]);
 
   return (
     <div className={styles.card}>
@@ -28,8 +33,22 @@ const Comment = ({
         <p className={styles.card__author}>{author}</p>
         <p className={styles.card__date}>{date}</p>
       </div>
-      {kids && <div className={styles.card__kids}>{subComments !== null && makeList(subComments)}</div>}
+      {subComments && (
+        <div className={styles.card__kids}>
+          {subComments !== null && makeList(subComments)}
+        </div>
+      )}
     </div>
   );
+};
+
+Comment.propTypes = {
+  dead: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
+  subComments: PropTypes.arrayOf(PropTypes.object),
+  timeConverter: PropTypes.func.isRequired,
+  makeList: PropTypes.func.isRequired,
 };
 export default Comment;

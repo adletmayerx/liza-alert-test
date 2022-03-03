@@ -3,9 +3,17 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 20px;
-  width: 600px;
+  width: calc(100% - 50px);
 }
+
+
+.card__author {
+  margin: 0;
+  font-weight: 600;
+}
+
 
 .card__kids {
   margin-left: 40px;
+  width: calc(100% - 50px);
 }

@@ -21,8 +21,7 @@
 }
 
 .card__title {
-  min-width: 200px;
-  max-width: 600px;
+  width: 70%;
 }
 
 .card__author {

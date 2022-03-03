@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { api } from "../../utils/api";
-import { Comment } from "..";
+import { MemoCommentsSection } from "..";
+import PropTypes from "prop-types";
 
 const NewsItem = ({ newsList, timeConverter }) => {
   let { id } = useParams();
@@ -18,46 +19,34 @@ const NewsItem = ({ newsList, timeConverter }) => {
     setCommentsSectionIsOpen(!commentsSectionIsOpen);
   };
 
-  const makeList = (arr) => {
-    return (
-      <ul className={styles["card__comments-list"]}>
-        {arr.map((c) => {
-          return (
-            <li key={c.id}>
-              <Comment
-                text={c.text}
-                author={c.by}
-                time={c.time}
-                kids={null || c.kids}
-                timeConverter={timeConverter}
-                makeList={makeList}
-                subComments={null || c.subComments}
-              ></Comment>
-            </li>
-          );
-        })}
-      </ul>
-    );
-  };
-
   useEffect(() => {
     const checkKids = (parent) => {
       if (parent.kids) {
         parent.kids.forEach((item) => {
-          api.getItemById(item).then((res) => {
-            setCommentsList((c) => [...c, res]);
-            checkKids(res);
-          });
+          api
+            .getItemById(item)
+            .then((res) => {
+              setCommentsList((c) => [...c, res]);
+              checkKids(res);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
         });
       }
     };
 
     if (newsItem.kids) {
       newsItem.kids.forEach((id) => {
-        api.getItemById(id).then((res) => {
-          setCommentsList((c) => [...c, res]);
-          checkKids(res);
-        });
+        api
+          .getItemById(id)
+          .then((res) => {
+            setCommentsList((c) => [...c, res]);
+            checkKids(res);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       });
     }
   }, [newsItem.kids]);
@@ -101,7 +90,7 @@ const NewsItem = ({ newsList, timeConverter }) => {
   return (
     <div className={styles.card}>
       <div className={styles.card__header}>
-        <Link className={styles.card__link} to="/">
+        <Link className={styles.card__link} to="/liza-alert-test">
           &#8592;return to home page{" "}
         </Link>
         <h2 className={styles.card__title}>{newsItem.title}</h2>
@@ -134,13 +123,19 @@ const NewsItem = ({ newsList, timeConverter }) => {
             : "open comments section"}
         </button>{" "}
         {newsItem.descendants > 0 && commentsSectionIsOpen && (
-          <ul className={styles["card__comments-list"]}>
-            {makeList(commentsHierarchy)}
-          </ul>
+          <MemoCommentsSection
+            timeConverter={timeConverter}
+            commentsHierarchy={commentsHierarchy}
+          />
         )}
       </div>
     </div>
   );
+};
+
+NewsItem.propTypes = {
+  timeConverter: PropTypes.func.isRequired,
+  newsList: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default NewsItem;

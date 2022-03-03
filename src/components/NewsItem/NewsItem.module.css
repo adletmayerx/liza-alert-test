@@ -21,10 +21,3 @@
 .card__link:hover {
   opacity: 0.7;
 }
-
-.card__comments-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  gap: 20px;
-}
