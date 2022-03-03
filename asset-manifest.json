@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/liza-alert-test/static/css/main.8383b2c2.css",
-    "main.js": "/liza-alert-test/static/js/main.a58dc91b.js",
+    "main.js": "/liza-alert-test/static/js/main.fc2d06fb.js",
     "static/js/787.7f340723.chunk.js": "/liza-alert-test/static/js/787.7f340723.chunk.js",
     "index.html": "/liza-alert-test/index.html",
     "main.8383b2c2.css.map": "/liza-alert-test/static/css/main.8383b2c2.css.map",
-    "main.a58dc91b.js.map": "/liza-alert-test/static/js/main.a58dc91b.js.map",
+    "main.fc2d06fb.js.map": "/liza-alert-test/static/js/main.fc2d06fb.js.map",
     "787.7f340723.chunk.js.map": "/liza-alert-test/static/js/787.7f340723.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.8383b2c2.css",
-    "static/js/main.a58dc91b.js"
+    "static/js/main.fc2d06fb.js"
   ]
 }
